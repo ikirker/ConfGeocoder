@@ -33,7 +33,7 @@ type Conference struct {
 type GeoLocation struct {
 	Latitude  float64 `yaml:"latitude";json:"latitude"`
 	Longitude float64 `yaml:"longitude";json:"longitude"`
-	Altitude  float64 `yaml:"altitude";json:"altitude"` //  If you really want to tell us how high your conference is, I won't stop you
+	Altitude  float64 `yaml:"altitude";json:"altitude"` //  If you really want to tell us how high your conference is, I won't stop you, but our geocoder doesn't return it.
 }
 
 func ReadConferenceSeries(filename string) ConferenceSeries {
