@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/codingsince1985/geo-golang/openstreetmap"
 	"os"
 )
 
@@ -104,23 +103,12 @@ func MakeFeatureForConference(series ConferenceSeries, instance Conference) GJFe
 }
 
 func main() {
-	geocoder := openstreetmap.Geocoder()
-
 	confSeriesFiles := os.Args[1:]
 	confSerieses := []ConferenceSeries{}
 	for _, v := range confSeriesFiles {
 		fmt.Fprintf(os.Stderr, "Reading %s...\n", v)
 		confSeries := ReadConferenceSeries(v)
-		if confSeries.Next != nil {
-			if confSeries.Next.Location != "" {
-				cityLocation, err := geocoder.Geocode(confSeries.Next.Location)
-				if err != nil {
-					panic(err)
-				}
-				confSeries.Next.GeoCoords.Latitude = cityLocation.Lat
-				confSeries.Next.GeoCoords.Longitude = cityLocation.Lng
-			}
-		}
+		AddSeriesGeoCoords(&confSeries)
 		confSerieses = append(confSerieses, confSeries)
 	}
 	output := string(GenerateGeoJSON(confSerieses))
